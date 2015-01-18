@@ -61,7 +61,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </div>
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
-<p>The preprocessing of the data is very simple:<br />-First the variable “interval”&quot; is transformed to a factor. This gives a variable with 288 levels.</p>
+<p>The preprocessing of the data is very simple:<br />-First the variable “interval” is transformed to a factor. This gives a factor variable with 288 levels.</p>
 <pre class="r"><code># Load necesary packages
 library(downloader)
 
@@ -126,10 +126,53 @@ axis(2)</code></pre>
 <pre class="r"><code>MaxSteps&lt;-max(StepsPerInterval)
 IntervalMaxSteps&lt;-which(StepsPerInterval == MaxSteps, arr.ind=TRUE)
 IntervalMaxSteps&lt;-as.data.frame(IntervalMaxSteps)</code></pre>
-<p>In the previous time series plot we can observe that during the first 65 to 70 five minute intervals which corresponds aproximately to the first 6 hours of the day there are almost no steps. The average maximum number of steps is 206.1698 and occurs in the interval 104.</p>
+<p>In the previous time series plot we can observe that during the first 65 to 70 five minute intervals which corresponds aproximately to the first 6 hours of the day there are almost no steps. The average maximum number of steps is 206.1698 and occurs in the interval 104, around the 8.6 hour of the day.</p>
 </div>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>
+<p>To compute missing values I am going to use the library mice.</p>
+<pre class="r"><code># Calculate the number of missing values
+
+binaria&lt;-is.na(activity$steps)
+faltantes&lt;-activity$steps[binaria]
+faltan&lt;-length(faltantes)
+
+# load library mice
+library(mice)</code></pre>
+<pre><code>## Loading required package: Rcpp
+## Loading required package: lattice
+## mice 2.22 2014-06-10</code></pre>
+<pre class="r"><code>steps2&lt;-mice(activity, m = 3, maxit = 3)</code></pre>
+<pre><code>## 
+##  iter imp variable
+##   1   1  steps
+##   1   2  steps
+##   1   3  steps
+##   2   1  steps
+##   2   2  steps
+##   2   3  steps
+##   3   1  steps
+##   3   2  steps
+##   3   3  steps</code></pre>
+<pre class="r"><code>activity2&lt;-complete(steps2)
+
+with(activity2, hist(steps))</code></pre>
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-4" /></p>
+<pre class="r"><code># Calculate mean total number of steps per day
+medias2&lt;-with(activity2, 
+    {tapply(steps, date, mean)
+    })
+media2&lt;-mean(medias2, na.rm=TRUE)
+media2</code></pre>
+<pre><code>## [1] 37.51</code></pre>
+<pre class="r"><code># Calculate the median of the total number of steps per day
+medianas2&lt;-with(activity2, 
+     {tapply(steps, date, median)
+                      })
+mediana2&lt;-mean(medianas2, na.rm=TRUE)
+mediana2</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>The number of missing values is 2304.<br /> With this new data set the mean total number of steps is 37.5139 and the median is 0. The difference among the imputed and original data is not significant. In this particular case the imputation of data didn’t have much effect on the outcome.</p>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>

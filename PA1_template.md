@@ -10,7 +10,7 @@ The dataset consist of three variables:
 
 ## Loading and preprocessing the data
 The preprocessing of the data is very simple:  
--First the variable "interval"" is transformed to a factor. This gives a variable with 288 levels.  
+-First the variable "interval" is transformed to a factor. This gives a factor variable with 288 levels.  
 
 
 
@@ -117,10 +117,82 @@ IntervalMaxSteps<-which(StepsPerInterval == MaxSteps, arr.ind=TRUE)
 IntervalMaxSteps<-as.data.frame(IntervalMaxSteps)
 ```
 
-In the previous time series plot we can observe that during the first 65 to 70 five minute intervals which corresponds aproximately to the first 6 hours of the day there are almost no steps. The average maximum number of steps is 206.1698 and occurs in the interval 104.
+In the previous time series plot we can observe that during the first 65 to 70 five minute intervals which corresponds aproximately to the first 6 hours of the day there are almost no steps. The average maximum number of steps is 206.1698 and occurs in the interval 104, around the 8.6 hour of the day.
 
 ## Imputing missing values
+To compute missing values I am going to use the library mice.
 
 
+```r
+# Calculate the number of missing values
+
+binaria<-is.na(activity$steps)
+faltantes<-activity$steps[binaria]
+faltan<-length(faltantes)
+
+# load library mice
+library(mice)
+```
+
+```
+## Loading required package: Rcpp
+## Loading required package: lattice
+## mice 2.22 2014-06-10
+```
+
+```r
+steps2<-mice(activity, m = 3, maxit = 3)
+```
+
+```
+## 
+##  iter imp variable
+##   1   1  steps
+##   1   2  steps
+##   1   3  steps
+##   2   1  steps
+##   2   2  steps
+##   2   3  steps
+##   3   1  steps
+##   3   2  steps
+##   3   3  steps
+```
+
+```r
+activity2<-complete(steps2)
+
+with(activity2, hist(steps))
+```
+
+![plot of chunk unnamed-chunk-4](./PA1_template_files/figure-html/unnamed-chunk-4.png) 
+
+```r
+# Calculate mean total number of steps per day
+medias2<-with(activity2, 
+    {tapply(steps, date, mean)
+    })
+media2<-mean(medias2, na.rm=TRUE)
+media2
+```
+
+```
+## [1] 37.51
+```
+
+```r
+# Calculate the median of the total number of steps per day
+medianas2<-with(activity2, 
+     {tapply(steps, date, median)
+                      })
+mediana2<-mean(medianas2, na.rm=TRUE)
+mediana2
+```
+
+```
+## [1] 0
+```
+ The number of missing values is 2304.  
+ With this new data set the mean total number of steps is 37.5139 and the median is 0. The difference among the imputed and original data is not significant. In this particular case the imputation of data didn't have much effect on the outcome.
+ 
 
 ## Are there differences in activity patterns between weekdays and weekends?

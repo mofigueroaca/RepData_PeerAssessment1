@@ -89,7 +89,39 @@ IntervalMaxSteps<-as.data.frame(IntervalMaxSteps)
 In the previous time series plot we can observe that during the first 65 to 70 five minute intervals which corresponds aproximately to the first 6 hours of the day there are almost no steps. The average maximum number of steps is `r MaxSteps` and occurs in the interval `r IntervalMaxSteps$dim1`, around the 8.6 hour of the day.
 
 ## Imputing missing values
+To compute missing values I am going to use the library mice.
 
+```{r, echo = TRUE}
+# Calculate the number of missing values
 
+binaria<-is.na(activity$steps)
+faltantes<-activity$steps[binaria]
+faltan<-length(faltantes)
+
+# load library mice
+library(mice)
+steps2<-mice(activity, m = 3, maxit = 3)
+activity2<-complete(steps2)
+
+with(activity2, hist(steps))
+
+# Calculate mean total number of steps per day
+medias2<-with(activity2, 
+    {tapply(steps, date, mean)
+    })
+media2<-mean(medias2, na.rm=TRUE)
+media2
+
+# Calculate the median of the total number of steps per day
+medianas2<-with(activity2, 
+     {tapply(steps, date, median)
+                      })
+mediana2<-mean(medianas2, na.rm=TRUE)
+mediana2
+
+```
+ The number of missing values is `r faltan`.  
+ With this new data set the mean total number of steps is `r media2` and the median is `r mediana2`. The difference among the imputed and original data is not significant. In this particular case the imputation of data didn't have much effect on the outcome.
+ 
 
 ## Are there differences in activity patterns between weekdays and weekends?

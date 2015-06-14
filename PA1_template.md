@@ -218,7 +218,7 @@ summary(tot_num_steps_day2$Steps)
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##      41    9819   11770   12530   14600   35080
+##      41    9819   11830   12930   15100   36020
 ```
 
 ```r
@@ -227,7 +227,7 @@ AveTotNumStepsDay2
 ```
 
 ```
-## [1] 12531.53
+## [1] 12926.74
 ```
 
 ```r
@@ -237,10 +237,10 @@ MedTotNumStepsDay2
 
 ```
 ##   50% 
-## 11774
+## 11829
 ```
 
-With this new data set the mean total number of steps is 1.2531528\times 10^{4} and the median is 1.1774\times 10^{4}. The difference among the imputed and original data is  significant. The histogram shows a sqewd distribition in comparison with the one obtained with the reduced data. 
+With this new data set the mean total number of steps is 1.2926736\times 10^{4} and the median is 1.1829\times 10^{4}. The difference among the imputed and original data is  significant. The histogram shows a sqewd distribition in comparison with the one obtained with the reduced data. 
 
 ## Are there differences in activity patterns between weekdays and weekends?  
 
@@ -286,19 +286,14 @@ WEStepsPerInterval<-with(A6weekends,
 WDStepsPerInterval<-with(A6weekdays, 
                          {tapply(steps, interval, mean, na.rm = TRUE)
                          })
-
-plot(WEStepsPerInterval, type = "l", main ="Weekend Mean Steps per Interval", xlab="Interval", ylab="Mean Steps", axes = FALSE)
+par(mfrow=c(1,2))
+plot(WEStepsPerInterval, type = "l", main ="Weekend Steps per Interval", xlab="Interval", ylab="Mean Steps", axes = FALSE)
+axis(side=1, at=marcas, las = 2)
+axis(2)
+plot(WDStepsPerInterval, type = "l", main ="Weekday Steps per Interval", xlab="Interval", ylab="Mean Steps", axes = FALSE)
 axis(side=1, at=marcas, las = 2)
 axis(2)
 ```
 
 ![](PA1_template_files/figure-html/eigth_part-1.png) 
-
-```r
-plot(WDStepsPerInterval, type = "l", main ="Weekday Mean Steps per Interval", xlab="Interval", ylab="Mean Steps", axes = FALSE)
-axis(side=1, at=marcas, las = 2)
-axis(2)
-```
-
-![](PA1_template_files/figure-html/eigth_part-2.png) 
 

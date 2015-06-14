@@ -189,14 +189,17 @@ WEStepsPerInterval<-with(A6weekends,
 WDStepsPerInterval<-with(A6weekdays, 
                          {tapply(steps, interval, mean, na.rm = TRUE)
                          })
-
-plot(WEStepsPerInterval, type = "l", main ="Weekend Mean Steps per Interval", xlab="Interval", ylab="Mean Steps", axes = FALSE)
+par(mfrow=c(1,2))
+plot(WEStepsPerInterval, type = "l", main ="Weekend Steps per Interval", xlab="Interval", ylab="Mean Steps", axes = FALSE)
+axis(side=1, at=marcas, las = 2)
+axis(2)
+plot(WDStepsPerInterval, type = "l", main ="Weekday Steps per Interval", xlab="Interval", ylab="Mean Steps", axes = FALSE)
 axis(side=1, at=marcas, las = 2)
 axis(2)
 
-plot(WDStepsPerInterval, type = "l", main ="Weekday Mean Steps per Interval", xlab="Interval", ylab="Mean Steps", axes = FALSE)
-axis(side=1, at=marcas, las = 2)
-axis(2)
+
+
+
 
 
 ```

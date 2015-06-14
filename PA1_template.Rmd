@@ -2,7 +2,9 @@
 title: "Assignment 1"
 author: "Monica Figueroa"
 date: "14 de junio de 2015"
-output: html_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 ## Introduction
@@ -176,6 +178,25 @@ for (i in 1:nrow(activity4)) {
 activity6 <- split(activity4, activity4$dayweek)
 A6weekends <- activity6[["Weekend"]]
 A6weekdays <- activity6[["Weekday"]]
+
+WEStepsPerInterval<-with(A6weekends, 
+                       {tapply(steps, interval, mean, na.rm = TRUE)
+                       })
+
+
+
+
+WDStepsPerInterval<-with(A6weekdays, 
+                         {tapply(steps, interval, mean, na.rm = TRUE)
+                         })
+
+plot(WEStepsPerInterval, type = "l", main ="Weekend Mean Steps per Interval", xlab="Interval", ylab="Mean Steps", axes = FALSE)
+axis(side=1, at=marcas, las = 2)
+axis(2)
+
+plot(WDStepsPerInterval, type = "l", main ="Weekday Mean Steps per Interval", xlab="Interval", ylab="Mean Steps", axes = FALSE)
+axis(side=1, at=marcas, las = 2)
+axis(2)
 
 
 ```
